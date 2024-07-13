@@ -1,0 +1,226 @@
+package parameterization;
+
+import java.util.List;
+
+//import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.By;
+
+//import java.util.concurrent.TimeUnit;
+
+//import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+
+//import com.beust.jcommander.Parameters;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class TDInsuranceCarQuote {
+
+
+	
+
+public 	WebDriver driver = new ChromeDriver();
+
+public Actions action;
+	
+
+@Test (dataProvider = "browserUrl", dataProviderClass = TD_DataProvider.class)
+
+	public void OpenBrowser(String url) throws InterruptedException
+	{
+	//ChromeOptions options = new ChromeOptions();
+	String driverExecutablePath = "C:\\Drivers\\chromedriver.exe";   
+	System.setProperty("webdriver.chrome.driver", driverExecutablePath);
+	
+	// driver= new ChromeDriver(options);
+	//		WebDriverManager.chromedriver().setup();
+	//	url="https://www.tdinsurance.com/";
+	action = new Actions(driver);
+		driver.get(url);
+		driver.manage().window().maximize();
+		driver.findElement(By.xpath("//*[@id=\"onetrust-accept-btn-handler\"]")).click();
+	
+	
+		WebElement elementToHover = driver.findElement(By.xpath("//span[text()=\"Car Quote\"]"));
+		//	WebElement elementToHover = driver.findElement(By.partialLinkText("Mortg"));
+		//WebElement elementToHover = driver.findElement(By.xpath("//*[@id=\"dvl-wpr\"]/header/div[4]/nav/ul/li[3]/a"));
+		//action.click(elementToHover);
+		elementToHover.click();
+		Thread.sleep(5000);
+		System.out.println("The title is " + driver.getTitle());
+		String expected = "Ontario Car Insurance Quote: Start Now | TD Insurance";
+		String actual= driver.getTitle();
+//ADDING ASSERT TO VALIDATE THE PAGE TITLE 
+		Assert.assertEquals(actual, expected);
+		
+		WebElement province = driver.findElement(By.xpath("//*[@id=\"changeQuoterProvince\"]"));
+		WebElement dropdown;				
+		//WebElement dropdown= driver.findElement(By.xpath("//*[@id=\"quoterEngine.question.quotersProvinceList.button\"]"));
+		
+		//province.click();
+		boolean isEnabled= province.isEnabled();
+		
+	//	boolean isDisplayed = driver.findElement(By.xpath("//*[@id=\"quoterEngine.question.quotersProvinceList.button\"]"));
+		
+		//dropdown= driver.findElement(By.xpath("//*[@id=\"quoterEngine.question.quotersProvinceList.button\"]"));
+		
+		if(isEnabled)
+		{
+			System.out.println("province is enabled");
+			
+			province.click();
+			
+			dropdown= driver.findElement(By.xpath("//*[@id=\"quoterEngine.question.quotersProvinceList.button\"]"));
+			
+			dropdown.isDisplayed();
+			
+		}
+		
+		else
+		{
+			System.out.println("province is not enabled");
+		}
+		
+		//if(isDisplayed)
+			
+	//	{
+	//		System.out.println("dropdown is enabled");
+	//	}
+		
+		//else
+	//	{
+		//	System.out.println("dropdown is not enabled");
+	//}
+//			
+
+
+WebElement province_dd = driver.findElement(By.xpath("//*[@id=\"quoterEngine.question.quotersProvinceList.button\"]"));
+WebElement carquote= driver.findElement(By.xpath("//*[@id=\"quoterEngine.page.yourVehicle\"]/div[1]/tdi-quoter-auto-quoter-auto-welcome/div/h1/button"));
+System.out.println("Car quote "+ carquote.getText());
+Select prov_dd = new Select(province_dd);
+System.out.println("province "+ prov_dd.getOptions());
+List <WebElement> prov_list=  prov_dd.getOptions();
+
+//if(prov_list.equals("ON"))
+//{
+//	carquote.isEnabled();
+//	System.out.println("Car quote "+ carquote.getText());
+//}
+
+for (WebElement weElement : prov_list)
+{
+	System.out.println("Drop down Text : "+ weElement.getText()) ;
+	
+	if (weElement.getText().equalsIgnoreCase("Alberta"))
+	{
+		carquote.isDisplayed();
+		carquote= driver.findElement(By.xpath("<button _ngcontent-vpt-c183=\"\" class=\"welcome-discount__btn\">Get a car insurance quote in Alberta</button>"));
+		System.out.println("Car quote "+ carquote.getText());
+		
+	} else if (weElement.getText().equalsIgnoreCase("New Brunswick"));
+	
+	{
+		carquote.isDisplayed();
+		carquote= driver.findElement(By.xpath("//*[@id=\"quoterEngine.page.yourVehicle\"]/div[1]/tdi-quoter-auto-quoter-auto-welcome/div/h1/button"));
+		System.out.println("Car quote "+ carquote.getText());
+		//System.out.println("Car quote "+ carquote.getText());
+	}
+	
+	}
+	}	}
+		////*[@id="quoterEngine.question.quotersProvinceList.button"]
+		
+		
+		
+	
+
+
+/*		WebElement elementToClick = driver.findElement(By.xpath("//*[@id=\"mm-mortgages\"]/div/div/div[2]/ul/li[1]/a"));
+		//WebElement elementToClick = driver.findElement(By.xpath("//*[@id=\"dvl-wpr\"]/main/section[2]/div/div/div/div/div/div/div/div/div[1]/ul/li[1]/a"));
+		
+		
+		//action.moveToElement(elementToHover).click(elementToClick).build().perform();
+		//actions.click(elementToClick);
+		//actions.moveToElement(elementToClick).click().build().perform();
+		//actions.click(elementToClick);
+		
+		WebElement afford=driver.findElement(By.xpath("<a href=\"/mortgages/tools/mortgage-affordability-calculator/index.html\">Affordability Calculator</a>"));
+		System.out.println(" Before Afford" + afford);	
+		
+			action.moveToElement(afford).click();
+				System.out.println(" After Afford");	
+	//		
+
+
+	
+	//String income1; String c_loan; String c_card; String loc1; String other1; String downpayment1;
+	//@Test
+	//@Parameters({"income1","c_loan", "c_card","loc1","other1","downpayment1"})
+	//@Test(dataProvider = "affordPage" , dataProviderClass= DP.class)
+	
+		//public void AffordPage(String income1, String c_loan, String c_card, String loc1, String other1, String downpayment1)
+		//{
+		
+		//WebDriverManager.chromedriver().setup();	
+//		WebDriver driver= new ChromeDriver();
+		
+		WebElement income2 = driver.findElement(By.xpath("//*[@id=\"income\"]"));
+		System.out.println("income 2 val " + income2);
+
+	//	income2.sendKeys(income1);
+					
+		WebElement dropdown =driver.findElement(By.id("total_debt"));
+		//dropdown.click();
+		//System.out.println("income 2 val " + income2);
+				
+		WebElement car_loan = dropdown.findElement(By.id("car_loan"));
+		
+		WebElement credit_card = dropdown.findElement(By.id("cc"));
+		
+		WebElement loc = dropdown.findElement(By.id("loc"));
+		
+		
+		WebElement other = dropdown.findElement(By.id("other"));
+		
+		WebElement contbtn= dropdown.findElement(By.xpath("//*[@id=\"budget-tooltip\"]/div[2]/button"));
+		
+		//downpayment.sendKeys("5000");
+		
+		//actions.moveToElement(dropdown).click().moveToElement(car_loan).sendKeys("6000").build().perform();
+		
+		//car_loan.sendKeys("6000");
+		//car_loan.sendKeys(c_loan);
+				
+		//credit_card.sendKeys("5000");
+		//credit_card.sendKeys(c_card);		
+		
+		//loc.sendKeys("20000");
+		
+		//loc.sendKeys(loc1);
+		
+		//other.sendKeys("1000");
+		
+		//other.sendKeys(other1);
+		
+		//contbtn.click();
+		
+		//WebElement downpayment = driver.findElement(By.id("dp"));
+		//downpayment.sendKeys("50000");
+		//downpayment.sendKeys(downpayment1);
+		
+		WebElement prequalify= driver.findElement(By.xpath("//*[@id=\"results\"]/a[2]"));
+		prequalify.click();
+
+	*/	//}
+	
+//}
